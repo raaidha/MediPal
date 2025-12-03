@@ -3,6 +3,7 @@
 MediPal is an Expo (React Native) app that helps you track medicines with a soft mint UI, friendly avatars, and local reminders.
 
 ## Features
+
 - Add / edit medicines: name, dosage amount + unit (pill/tablet/capsule/ml/unit/drop), times per day, duration (preset or custom days), color tag, reminders toggle, snooze.
 - Reminder times: per-dose time pickers; validates count matches "times per day"; optional snooze frequency; stores in AsyncStorage via Context API.
 - Remaining pills: auto-calculates total and remaining for pill/tablet/capsule units; updates when "Done" action is tapped on a notification.
@@ -12,33 +13,38 @@ MediPal is an Expo (React Native) app that helps you track medicines with a soft
 - Profile: username/email fields, avatar picker (grid of uploaded avatars), save profile, change password UI, logout clears local session.
 
 ## Installation & Run
-1) Install dependencies
+
+1. Clone the repo (first step)
+
+```bash
+git clone <repo-url>
+cd Mobileapp    # or your folder name
+```
+
+2. Install dependencies
+
 ```bash
 npm install
 ```
-2) Start in Expo Go (development)
+
+3. Start in Expo Go (development)
+
 ```bash
 npx expo start
 ```
+
 - Scan the QR code with Expo Go on your device. Accept notification permission prompts.
 - For reliable scheduled notifications and action buttons, use a development build instead of Expo Go.
-3) iOS/Android simulators (optional)
+
+4. iOS/Android simulators (optional)
+
 ```bash
 npm run ios    # requires Xcode + simulator
 npm run android
 ```
 
-## Pulling from Git (for reviewers/lecturer)
-If you’re cloning this repo fresh:
-```bash
-git clone <repo-url>
-cd Mobileapp    # or your folder name
-npm install
-npx expo start  # or npm run ios / npm run android
-```
-Expo Go works for quick preview; for reliable scheduled notifications, use a development build.
-
 ## Screenshots
+
 <table>
   <tr>
     <td><img src="./assets/images/photo_1_2025-12-03_22-57-14.jpg" width="240" /><div>Home (light)</div></td>
@@ -67,6 +73,7 @@ Expo Go works for quick preview; for reliable scheduled notifications, use a dev
 </table>
 
 ## Technologies Used
+
 - Expo SDK 54, React Native, TypeScript
 - Navigation: expo-router with bottom tabs
 - State/persistence: Context API, @react-native-async-storage/async-storage
@@ -74,6 +81,7 @@ Expo Go works for quick preview; for reliable scheduled notifications, use a dev
 - UI: @expo/vector-icons, react-native-gesture-handler, react-native-reanimated, react-native-safe-area-context
 
 ## Known Issues / Future Improvements
+
 - Expo Go limits notifications: scheduled alarms and action buttons are unreliable in Expo Go; use a dev build (`eas build --profile development`) for accurate timing.
 - Push notifications are not implemented; only local reminders are scheduled.
 - No cloud sync; all data is local.
