@@ -1,50 +1,80 @@
-# Welcome to your Expo app 👋
+# MediPal - Cute Medicine Tracker
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+MediPal is an Expo (React Native) app that helps you track medicines with a soft mint UI, friendly avatars, and local reminders.
 
-## Get started
+## Features
+- Add / edit medicines: name, dosage amount + unit (pill/tablet/capsule/ml/unit/drop), times per day, duration (preset or custom days), color tag, reminders toggle, snooze.
+- Reminder times: per-dose time pickers; validates count matches "times per day"; optional snooze frequency; stores in AsyncStorage via Context API.
+- Remaining pills: auto-calculates total and remaining for pill/tablet/capsule units; updates when "Done" action is tapped on a notification.
+- Notifications: scheduled by hour/minute with action buttons (Done, Remind me later); per-medicine cancel/reschedule when reminders are off or times change.
+- Theming: light and dark modes with persistence; themed tab bar and cards.
+- Navigation: bottom tabs (Home, Add, Account) plus Account stack for profile and appearance.
+- Profile: username/email fields, avatar picker (grid of uploaded avatars), save profile, change password UI, logout clears local session.
 
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+## Installation & Run
+1) Install dependencies
 ```bash
-npm run reset-project
+npm install
+```
+2) Start in Expo Go (development)
+```bash
+npx expo start
+```
+- Scan the QR code with Expo Go on your device. Accept notification permission prompts.
+- For reliable scheduled notifications and action buttons, use a development build instead of Expo Go.
+3) iOS/Android simulators (optional)
+```bash
+npm run ios    # requires Xcode + simulator
+npm run android
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Pulling from Git (for reviewers/lecturer)
+If you’re cloning this repo fresh:
+```bash
+git clone <repo-url>
+cd Mobileapp    # or your folder name
+npm install
+npx expo start  # or npm run ios / npm run android
+```
+Expo Go works for quick preview; for reliable scheduled notifications, use a development build.
 
-## Learn more
+## Screenshots
+<table>
+  <tr>
+    <td><img src="./assets/images/photo_1_2025-12-03_22-57-14.jpg" width="240" /><div>Home (light)</div></td>
+    <td><img src="./assets/images/photo_2_2025-12-03_22-57-14.jpg" width="240" /><div>Add Medicine (top)</div></td>
+    <td><img src="./assets/images/photo_3_2025-12-03_22-57-14.jpg" width="240" /><div>Add Medicine (reminders)</div></td>
+    <td><img src="./assets/images/photo_4_2025-12-03_22-57-14.jpg" width="240" /><div>Appearance (light)</div></td>
+  </tr>
+  <tr>
+    <td><img src="./assets/images/photo_5_2025-12-03_22-57-14.jpg" width="240" /><div>Profile (light)</div></td>
+    <td><img src="./assets/images/photo_6_2025-12-03_22-57-14.jpg" width="240" /><div>Account hub (light)</div></td>
+    <td><img src="./assets/images/photo_7_2025-12-03_22-57-14.jpg" width="240" /><div>Edit Medicine (light)</div></td>
+    <td><img src="./assets/images/photo_8_2025-12-03_22-57-14.jpg" width="240" /><div>Edit detail</div></td>
+  </tr>
+  <tr>
+    <td><img src="./assets/images/photo_9_2025-12-03_22-57-14.jpg" width="240" /><div>Edit (dark)</div></td>
+    <td><img src="./assets/images/photo_10_2025-12-03_22-57-14.jpg" width="240" /><div>Home (dark)</div></td>
+    <td><img src="./assets/images/photo_11_2025-12-03_22-57-14.jpg" width="240" /><div>Home detail (dark)</div></td>
+    <td><img src="./assets/images/photo_12_2025-12-03_22-57-14.jpg" width="240" /><div>Medicine card (dark)</div></td>
+  </tr>
+  <tr>
+    <td><img src="./assets/images/photo_13_2025-12-03_22-57-14.jpg" width="240" /><div>Medicine list (dark)</div></td>
+    <td><img src="./assets/images/photo_14_2025-12-03_22-57-14.jpg" width="240" /><div>Account (dark)</div></td>
+    <td><img src="./assets/images/photo_15_2025-12-03_22-57-14.jpg" width="240" /><div>Profile (dark)</div></td>
+    <td><img src="./assets/images/photo_16_2025-12-03_22-57-14.jpg" width="240" /><div>Card (dark)</div></td>
+  </tr>
+</table>
 
-To learn more about developing your project with Expo, look at the following resources:
+## Technologies Used
+- Expo SDK 54, React Native, TypeScript
+- Navigation: expo-router with bottom tabs
+- State/persistence: Context API, @react-native-async-storage/async-storage
+- Notifications: expo-notifications (local scheduled, action buttons)
+- UI: @expo/vector-icons, react-native-gesture-handler, react-native-reanimated, react-native-safe-area-context
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Known Issues / Future Improvements
+- Expo Go limits notifications: scheduled alarms and action buttons are unreliable in Expo Go; use a dev build (`eas build --profile development`) for accurate timing.
+- Push notifications are not implemented; only local reminders are scheduled.
+- No cloud sync; all data is local.
+- Future ideas: server sync, richer adherence stats, backup/restore, optional email login.

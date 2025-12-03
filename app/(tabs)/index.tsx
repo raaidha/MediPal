@@ -1,98 +1,105 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import MedicineCard from '../../components/MedicineCard';
+import { useAuth } from '../../context/AuthContext';
+import { useMedications } from '../../hooks/useMedications';
+import { avatarSources } from '../../lib/avatarSources';
+import { useThemeMode } from '../../context/ThemeContext';
 
-export default function HomeScreen() {
+export default function Home() {
+  const { medications } = useMedications();
+  const { user } = useAuth();
+  const { colors } = useThemeMode();
+  const today = new Date();
+  const dateLabel = today.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'short' }).toUpperCase();
+  const greeting = user?.username ? `Hi, ${user.username}` : 'Hi';
+  const avatarIndex = avatarSources.findIndex((a) => a.id === (user?.avatar ?? 'avatar1'));
+  const avatarImg = avatarSources[avatarIndex >= 0 ? avatarIndex : 0].source;
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top', 'left', 'right']}>
+      <View style={[styles.headerCard, { backgroundColor: colors.card, shadowColor: colors.accent }]}>
+        <View style={[styles.avatar, { backgroundColor: colors.background, borderColor: colors.border, borderWidth: 1 }]}>
+          <Image source={avatarImg} style={styles.avatarImage} />
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text style={[styles.headerTitle, { color: colors.text }]}>{greeting}</Text>
+          <Text style={[styles.headerSubtitle, { color: colors.accent }]}>{dateLabel}</Text>
+          <Text style={[styles.headerTagline, { color: colors.subtext }]}>Small steps make a big change.</Text>
+        </View>
+      </View>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      {medications.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <View style={[styles.emptyIconWrap, { backgroundColor: colors.card, shadowColor: colors.accent }]}>
+            <Ionicons name="sparkles" size={38} color={colors.accent} />
+          </View>
+          <Text style={[styles.emptyText, { color: colors.text }]}>No medicines yet!</Text>
+          <Text style={[styles.subText, { color: colors.subtext }]}>Tap the + button to add your first medication.</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={medications}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <MedicineCard med={item} />}
+          contentContainerStyle={{ paddingBottom: 120 }}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: { flex: 1, padding: 16 },
+  headerCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    padding: 20,
+    borderRadius: 22,
+    marginBottom: 18,
+    marginTop: 18,
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 4,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  avatar: {
+    width: 68,
+    height: 68,
+    borderRadius: 34,
+    backgroundColor: '#E0F7F3',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 14,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  avatarImage: { width: 68, height: 68, borderRadius: 34 },
+  headerTitle: { fontFamily: 'Poppins_700Bold', fontSize: 20 },
+  headerSubtitle: { fontFamily: 'Poppins_600SemiBold', fontSize: 12, marginTop: 4 },
+  headerTagline: { fontFamily: 'Poppins_500Medium', fontSize: 12, marginTop: 4 },
+  headerIcon: {
+    width: 38,
+    height: 38,
+    borderRadius: 12,
+    backgroundColor: '#EAFBF7',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
+  emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  emptyIconWrap: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 3,
+  },
+  emptyText: { fontSize: 20, fontFamily: 'Poppins_700Bold', marginTop: 14 },
+  subText: { fontSize: 14, fontFamily: 'Poppins_400Regular', marginTop: 6, textAlign: 'center' },
 });
