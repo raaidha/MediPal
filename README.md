@@ -17,8 +17,8 @@ MediPal is an Expo (React Native) app that helps you track medicines with a soft
 1. Clone the repo (first step)
 
 ```bash
-git clone <repo-url>
-cd MediPal    # or your folder name
+git clone <https://github.com/raaidha/MediPal.git>
+cd MediPal
 ```
 
 2. Install dependencies
